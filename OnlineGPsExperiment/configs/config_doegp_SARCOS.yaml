@@ -1,0 +1,6 @@
+offsets: [-0.03, -0.06, 0.06, -0.005, 0.03]
+N_start: 250
+ax_sci_notation: true
+make_inset_plot: true
+ax_inset_bbox: [-0.25, 0.15, 1.1, 1.2]
+ax_label_size: 12

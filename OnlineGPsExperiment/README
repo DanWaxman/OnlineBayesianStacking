@@ -1,0 +1,6 @@
+This folder contains code for the Online GP experiments in non-stationary settings.
+
+The code is based on the Dynamic Online Ensemble Basis Expansion (DOEBE) code:
+https://github.com/DanWaxman/DynamicOnlineBasisExpansions
+
+To obtain PLLs of each model, use `get_results.sh`. Then, use `compute_obs_weights.py` to compute the O-BMA and OBS weights, and `plot_obs_weights.py` to plot the results.
