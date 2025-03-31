@@ -1,0 +1,6 @@
+This folder contains code for the MNIST classification experiments.
+
+To obtain PLL outputs, we use a modified version of experiments from the BONG paper:
+https://github.com/petergchang/bong/blob/main/bong/experiments/mnist_clf.py
+
+These results are used in `results.ipynb` to plot the results.
