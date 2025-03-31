@@ -172,3 +172,15 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+*.pdf 
+*.png 
+*.npz
+*.h5
+*.pkl
+*.pickle
+*.pickle.gz
+*.pickle.bz2
+*.pickle.zip
+
+*.DS_Store

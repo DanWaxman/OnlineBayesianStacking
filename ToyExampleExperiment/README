@@ -1,0 +1,8 @@
+This folder contains code for the toy example experiment with subset linear regression. It relies on a modified version of the DOEBE code, in `DOEBE/doebe.py`.
+
+To run the experiment, use the following command:
+
+```bash
+python subset_linear_regression.py
+```
+This will generate the results necessary to make the plots in `results.ipynb`.
