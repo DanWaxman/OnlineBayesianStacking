@@ -14,7 +14,7 @@ parser.add_argument("--N_seeds", type=int, default=10, help="Number of seeds")
 
 args = parser.parse_args()
 
-colors = ["#FE7F2D", "#780116", "#FCCA46", "#A1C181", "#619B8A"]
+colors = ["#FE7F2D", "#780116","#FCCA46",  "#A1C181", "#619B8A", "#1D4EFC", "#C1007E","#0B3D91",  "#00D4FF", "#8C00FF"]
 SIZE_TINY = 10
 SIZE_SMALL = 12
 SIZE_DEFAULT = 14
@@ -86,7 +86,7 @@ N_SEEDS = args.N_seeds
 
 import yaml
 
-with open(f"configs/config_doegp_{dataset}.yaml", "r") as f:
+with open(f"config_doegp_{dataset}.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 offsets = config["offsets"]
@@ -107,9 +107,12 @@ static_weights_s = []
 reward_t_statics = []
 logws_softbayes_s = []
 reward_t_softbayes_s = []
-
+logws_dmas = []
+reward_t_dmas = []
 ws_ons = []
 reward_t_ons = []
+ws_ons_with_gamma = []
+reward_t_ons_with_gamma = []
 
 for seed in range(N_SEEDS):
     results = np.load(f"results_doegp_dataset_{dataset}_seed_{seed}.npz")
@@ -125,6 +128,12 @@ for seed in range(N_SEEDS):
     logws_softbayes_s.append(results["arr_8"])
     reward_t_softbayes_s.append(results["arr_9"])
 
+    logws_dmas.append(results["arr_10"])
+    reward_t_dmas.append(results["arr_11"])
+
+    ws_ons_with_gamma.append(results["arr_12"])
+    reward_t_ons_with_gamma.append(results["arr_13"])
+
 log_ws_eg = np.stack(logws_egs)
 reward_t_eg = np.stack(reward_t_eg_s)
 logws_bma = np.stack(logws_bmas)
@@ -133,6 +142,11 @@ static_weights = np.stack(static_weights_s)
 reward_t_static = np.stack(reward_t_statics)
 logws_softbayes = np.stack(logws_softbayes_s)
 reward_t_softbayes = np.stack(reward_t_softbayes_s)
+logws_dma = np.stack(logws_dmas)
+reward_t_dma = np.stack(reward_t_dmas)
+
+ws_ons_with_gamma = np.stack(ws_ons_with_gamma)
+reward_t_ons_with_gamma = np.stack(reward_t_ons_with_gamma)
 
 ws_ons = np.stack(ws_ons)
 reward_t_ons = np.stack(reward_t_ons)
@@ -146,6 +160,8 @@ values = {
     "reward_t_static": np.median(reward_t_static, axis=0)[-1],
     "reward_t_ons": np.median(reward_t_ons, axis=0)[-1],
     "reward_t_softbayes": np.median(reward_t_softbayes, axis=0)[-1],
+    "reward_t_dma": np.median(reward_t_dma, axis=0)[-1],
+    "reward_t_ons_with_gamma": np.median(reward_t_ons_with_gamma, axis=0)[-1],
 }
 
 # Sort by value and print variable names in order
@@ -160,7 +176,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
 import numpy as np
 
 N = reward_t_bma.shape[1]
-labels = ["EG", "O-BMA", "ONS", "Soft-Bayes", "BCRP"]
+labels = ["EG", "O-BMA", "ONS", "Soft-Bayes", "BCRP", "DMA", "D-ONS"]
 N_start = config["N_start"]
 # Main figure and axes
 fig, ax = plt.subplots(figsize=(4.25, 3))
@@ -181,6 +197,8 @@ make_plot(
         reward_t_ons[:, N_start:],
         reward_t_softbayes[:, N_start:],
         reward_t_static[:, N_start:],
+        reward_t_dma[:, N_start:],
+        reward_t_ons_with_gamma[:, N_start:],
     ],
     labels,
     colors,
@@ -248,6 +266,8 @@ if "make_inset_plot" in config and config["make_inset_plot"]:
             reward_t_ons[:, int(0.75 * N):],
             reward_t_softbayes[:, int(0.75 * N):],
             reward_t_static[:, int(0.75 * N):],
+            reward_t_dma[:, int(0.75 * N):],
+            reward_t_ons_with_gamma[:, int(0.75 * N):],
         ],
         colors,
         ax_inset,
@@ -288,7 +308,7 @@ M = log_ws_eg.shape[2]
 axs[1].bar(range(M), np.exp(log_ws_eg)[simu, -1, :], color="black")
 axs[1].set_xticks(range(M), [""] * M)
 axs[1].set_title("EG")
-axs[1].set_ylabel("$w_k$")
+axs[0].set_ylabel("$w_k$")
 
 axs[0].bar(range(M), np.exp(logws_bma)[simu, -1, :], color="black")
 axs[0].set_xticks(range(M), [""] * M)
